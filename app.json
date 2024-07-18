@@ -1,0 +1,105 @@
+{
+  "houses": [
+    {
+      "id": "9023",
+      "property_type": "Family Houses",
+      "title": "4-Bedroom Classic House",
+      "price": "100000-300000",
+      "city": "Nairobi",
+      "street_address": "145-Ngong-Road Karen Square.",
+      "description": "4-Bedroom classic and spacious house.",
+      "leasing_terms": "For Sale"
+    },
+    {
+      "id": "c849",
+      "property_type": "Apartment",
+      "title": "Storey-Appartment",
+      "price": "200000-450000",
+      "city": "Kiambu",
+      "street_address": "145-Ngong-Road Karen Square.",
+      "description": "Two-floors storey appartment, 200m squared compound with parking side.",
+      "leasing_terms": "For Sale"
+    },
+    {
+      "property_type": "Family Houses",
+      "title": "Five bedroom",
+      "price": "10000-20000",
+      "city": "Thika",
+      "street_address": "1718",
+      "description": "very big",
+      "leasing_terms": "For Sale",
+      "id": "0932"
+    }
+  ],
+  "users": [
+    {
+      "username": "kevinh",
+      "first_name": "kevin",
+      "last_name": "kibet",
+      "email": "kevinkbet@gmail.com",
+      "id": "1516"
+    },
+    {
+      "id": "d2e8",
+      "username": "Eugene",
+      "first_name": "Eugene",
+      "last_name": "Milan",
+      "email": "milanke@gmail.com",
+      "passsword": "1234"
+    },
+    {
+      "id": "26d0",
+      "username": "Reen",
+      "first_name": "Maureen",
+      "last_name": "Kambua",
+      "email": "reenjay55@gmail.com"
+    },
+    {
+      "id": "2a81",
+      "username": "jeff",
+      "first_name": "Jefferson",
+      "last_name": "Muturi",
+      "email": "jeff@gmail.com"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "5",
+      "created_at": "2024-07-01T12:34:56Z",
+      "comment": "Well structured and furnished!",
+      "agent_id": "128",
+      "rating": "3"
+    },
+    {
+      "id": "1",
+      "created_at": "2024-06-28T12:34:56Z",
+      "comment": "Classic house worth the rated price",
+      "agent_id": "124",
+      "rating": "4.5"
+    },
+    {
+      "id": "2",
+      "created_at": "2024-06-28T12:34:56Z",
+      "comment": "Great service!",
+      "agent_id": "123",
+      "rating": "4.5"
+    },
+    {
+      "id": "4",
+      "created_at": "2024-07-01T12:34:56Z",
+      "comment": "Quality house, well structured and furnished!",
+      "agent_id": "126",
+      "rating": "5"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "e82b"
+    }
+  ],
+  "payments": [
+    {
+      "id": "3fa1"
+    }
+  ]
+}

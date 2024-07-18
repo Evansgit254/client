@@ -1,0 +1,25 @@
+<svg width="348" height="90" viewBox="0 0 348 90" xmlns="http://www.w3.org/2000/svg">
+  <!-- Define gradients for the colors -->
+  <defs>
+    <linearGradient id="gradient-green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00cc99"/>
+      <stop offset="100%" stop-color="#009966"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Draw the house shape -->
+  <g fill="none" stroke="url(#gradient-green)" stroke-width="6">
+    <path d="M25 30 L50 10 L75 30 V60 H50 V40 H50 V60 H25 Z" />
+  </g>
+  
+  <!-- Draw the buttons (windows) in the house -->
+  <circle cx="40" cy="35" r="3" fill="#22303c" />
+  <circle cx="60" cy="35" r="3" fill="#22303c" />
+  <circle cx="40" cy="55" r="3" fill="#22303c" />
+  <circle cx="60" cy="55" r="3" fill="#22303c" />
+
+  <!-- RentUP text -->
+  <text x="90" y="55" font-family="Arial" font-size="40" fill="#22303c">Rent</text>
+  <text x="200" y="55" font-family="Arial" font-size="40" fill="url(#gradient-green)">UP</text>
+</svg>
+
