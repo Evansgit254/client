@@ -1,15 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import {ContextApi} from './context/contextApi.jsx'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import { ContextApi } from "./context/contextApi.jsx";
 
-import "./index.css"
+import "./index.css";
+import HouseContextProvider from "./context/HouseContext.jsx";
 
-
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ContextApi >
-    <App />
+    <ContextApi>
+      <HouseContextProvider>
+        <App />
+      </HouseContextProvider>
     </ContextApi>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

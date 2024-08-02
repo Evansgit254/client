@@ -66,3 +66,4 @@ export const getBookings = () => {
 export const getPayments = () => {
   return fetch().then((res) => res.json());
 };
+

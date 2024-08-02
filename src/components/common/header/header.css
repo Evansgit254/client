@@ -10,14 +10,7 @@ header {
 header img {
     width: 170px;
 }
-header a {
-    margin-left: 30px;
-    transition: 0.5s;
-    font-weight: 500;
-}
-header a:hover {
-    color: #27ae60;
-}
+
 header span {
     width: auto;
     padding: 0px 6px;
@@ -58,10 +51,5 @@ header .toggle {
         width: 100%;
         background-color: #27ae60;
         padding: 20px;
-    }
-    header li a {
-        display: inline-block;
-        margin-bottom: 20px;
-        color: #fff;
     }
 }

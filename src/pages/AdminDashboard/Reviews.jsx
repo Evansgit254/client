@@ -11,7 +11,7 @@ function Reviews() {
     getReviews()
       .then((res) => {
         console.log("API Response:", res); // Log the response to see the structure
-        setDataSource(res); // Assuming res is an array of reviews
+        setDataSource(res);
         setLoading(false);
       })
       .catch((error) => {
@@ -50,7 +50,7 @@ function Reviews() {
             title: "Rating",
             dataIndex: "rating",
             key: "rating",
-            render: (rating) => <Rate value={rating} allowHalf disabled />,
+            render: (rating) => <Rate value={rating} allowHalf enabled />,
           },
         ]}
         dataSource={dataSource.map((item) => ({ ...item, key: item.id }))} // Add key for each item
