@@ -21,13 +21,14 @@ const { Option } = Select;
 function Houses() {
   const [body, setBody] = useState({
     property_type: "",
+    country:"",
     id: "",
     title: "",
     price: "",
     city: "",
     street_address: "",
     description: "",
-    leasing_terms: "",
+    advert_type: "",
   });
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState([]);
@@ -167,6 +168,10 @@ function Houses() {
             dataIndex: "title",
           },
           {
+            title: "Country",
+            dataIndex: "country",
+          },
+          {
             title: "Price",
             dataIndex: "price",
             render: (value) => <span>Ksh.{value}</span>,
@@ -188,8 +193,8 @@ function Houses() {
             dataIndex: "description",
           },
           {
-            title: "Leasing Terms",
-            dataIndex: "leasing_terms",
+            title: "Advert Type",
+            dataIndex: "advert_type",
           },
           {
             title: "Actions",
@@ -245,6 +250,13 @@ function Houses() {
             <Input />
           </Form.Item>
           <Form.Item
+            name="country"
+            label="Country"
+            rules={[{ required: true, message: "Please input the country!" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
             name="price"
             label="Price Range"
             rules={[
@@ -288,8 +300,8 @@ function Houses() {
             <Input.TextArea />
           </Form.Item>
           <Form.Item
-            name="leasing_terms"
-            label="Leasing Terms"
+            name="advert_type"
+            label="Advert Type"
             rules={[
               { required: true, message: "Please select the leasing terms!" },
             ]}

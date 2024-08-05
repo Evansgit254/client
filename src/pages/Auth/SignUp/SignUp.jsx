@@ -32,6 +32,7 @@ const SignUp = () => {
     setErrors(defaultUser)
     axios.post("http://127.0.0.1:8000/api/v1/auth/users/", formData).then((response) => {
       navigate("/login")
+      setFormData(response.data.houses)
     }).catch((error)=>{
       if (error.response) {
         const allErrors = {}
@@ -51,7 +52,7 @@ const SignUp = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 my-8 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-        <div onSubmit={handleSubmit}>
+        <div>
         <div className="mb-4">
             <label className="block text-sm font-bold mb-2" htmlFor="firstname">Firstname<span className="text-red-500">*</span></label>
             <input 

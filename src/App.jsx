@@ -26,10 +26,10 @@ function App() {
         <Route path="/dashboard" element={<ProtectedRoute />}>
           <Route index element={<AdminDashboard />} />
           <Route path="houses" element={<Houses />} />
-          <Route path="clients" element={<Clients />} />
-          <Route path="bookings" element={<Bookings />} />
-          <Route path="payments" element={<Payments />} />
-          <Route path="reviews" element={<Reviews />} />
+          <Route path="/dashboard/clients" element={<Clients />} />
+          <Route path="/dashboard/bookings" element={<Bookings />} />
+          <Route path="/dashboard/payments" element={<Payments />} />
+          <Route path="/dashboard/reviews" element={<Reviews />} />
         </Route>
         <Route path="*" element={<Error />} />
       </Routes>

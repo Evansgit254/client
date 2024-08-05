@@ -32,6 +32,7 @@ const LogIn = () => {
       })
       const results = await response.json()
       setAuthToken(results)
+      console.log(results)
       setError({msg:"You are successfully loggedin. Redirecting...", status:"success"})
       navigate("/dashboard")
     } catch (error) {

@@ -29,6 +29,7 @@ body {
 .icon,
 .icon_header {
   margin-right: 5px;
+  color: white;
 }
 
 .close_icon {
@@ -92,6 +93,7 @@ body {
   margin-top: 15px;
   font-size: 20px;
   font-weight: 700;
+  color: #fff;
 }
 
 .sidebar-list {

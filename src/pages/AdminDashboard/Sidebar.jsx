@@ -25,28 +25,28 @@ const links = [
   },
   {
     icon: <BsHouseAddFill className="icon" />,
-    title: "Houses",
+    title: "Properties",
     link: "houses",
   },
   {
     icon: <BsPeopleFill className="icon" />,
     title: "Clients",
-    link: "/dashboard/clients",
+    link: "clients",
   },
   {
     icon: <BsBookFill className="icon" />,
     title: "Bookings",
-    link: "/dashboard/bookings",
+    link: "bookings",
   },
   {
     icon: <BsCash className="icon" />,
     title: "Payments",
-    link: "/dashboard/payments",
+    link: "payments",
   },
   {
     icon: <BsMenuButtonWideFill className="icon" />,
     title: "Reviews",
-    link: "/dashboard/reviews",
+    link: "reviews",
   },
   // {
   //   icon: <BsFillGearFill className="icon" />,
