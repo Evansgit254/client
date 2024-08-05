@@ -18,15 +18,27 @@ const { Option } = Select;
 const Houses = () => {
   const { accessToken, refreshAccessToken } = useAuth();
   const [body, setBody] = useState({
-    property_type: "",
     id: "",
-    country: "",
+    user: "",
     title: "",
-    price: "",
-    city: "",
-    street_address: "",
+    slug: "",
+    ref_code: "",
     description: "",
+    country: "",
+    city: "",
+    postal_code: "",
+    street_address: "",
+    property_number: "",
+    price: "",
+    tax: "",
+    final_property_price: "",
+    plot_area: "",
+    total_floors: "",
+    bedrooms: "",
+    bathrooms: "",
     advert_type: "",
+    property_type: "",
+    cover_photo: "",
   });
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState([]);
@@ -41,12 +53,13 @@ const Houses = () => {
     setLoading(true);
     getHouses()
       .then((res) => {
-        console.log(res.data); // Log the response data to check its structure
-        if (Array.isArray(res.data)) {
-          setDataSource(res.data);
-          setFilteredData(res.data);
+        console.log("Response Data:", res.data);
+        const results = res.data.results; // Extract the results array
+        if (Array.isArray(results)) {
+          setDataSource(results);
+          setFilteredData(results);
         } else {
-          console.error("Unexpected response data:", res.data);
+          console.error("Unexpected response data format:", results);
           message.error("Failed to fetch houses. Unexpected response format.");
         }
         setLoading(false);
@@ -239,21 +252,17 @@ const Houses = () => {
             dataIndex: "id",
           },
           {
-            title: "Country",
-            dataIndex: "country",
-          },
-          {
             title: "Title",
             dataIndex: "title",
           },
           {
-            title: "Price",
-            dataIndex: "price",
-            render: (value) => <span>Ksh.{value}</span>,
+            title: "Description",
+            dataIndex: "description",
           },
           {
-            title: "Property Type",
-            dataIndex: "property_type",
+            title: "Country",
+            dataIndex: "country",
+            render: (value) => <span>Ksh.{value}</span>,
           },
           {
             title: "City",
@@ -264,12 +273,16 @@ const Houses = () => {
             dataIndex: "street_address",
           },
           {
-            title: "Description",
-            dataIndex: "description",
+            title: "Price",
+            dataIndex: "price",
           },
           {
-            title: "Advert Type",
+            title: "Advert type",
             dataIndex: "advert_type",
+          },
+          {
+            title: "Property Type",
+            dataIndex: "property_type",
           },
           {
             title: "Actions",
@@ -303,21 +316,6 @@ const Houses = () => {
           onFinish={handleFinish}
         >
           <Form.Item
-            name="property_type"
-            label="Property Type"
-            rules={[
-              { required: true, message: "Please select the property type!" },
-            ]}
-          >
-            <Select placeholder="Select property type">
-              <Option value="Family Houses">Family House</Option>
-              <Option value="Villas">House & Villa</Option>
-              <Option value="Apartment">Apartment</Option>
-              <Option value="Office & Studio">Office & Studio</Option>
-              <Option value="Villa & Condo">Villa & Condo</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
             name="title"
             label="Title"
             rules={[{ required: true, message: "Please enter the title!" }]}
@@ -325,18 +323,20 @@ const Houses = () => {
             <Input placeholder="Enter title" />
           </Form.Item>
           <Form.Item
+            name="description"
+            label="Description"
+            rules={[
+              { required: true, message: "Please enter the description!" },
+            ]}
+          >
+            <Input.TextArea placeholder="Enter description" />
+          </Form.Item>
+          <Form.Item
             name="country"
             label="Country"
             rules={[{ required: true, message: "Please enter the country!" }]}
           >
             <Input placeholder="Enter country" />
-          </Form.Item>
-          <Form.Item
-            name="price"
-            label="Price"
-            rules={[{ required: true, message: "Please enter the price!" }]}
-          >
-            <Input placeholder="Enter price" />
           </Form.Item>
           <Form.Item
             name="city"
@@ -355,13 +355,11 @@ const Houses = () => {
             <Input placeholder="Enter street address" />
           </Form.Item>
           <Form.Item
-            name="description"
-            label="Description"
-            rules={[
-              { required: true, message: "Please enter the description!" },
-            ]}
+            name="price"
+            label="Price"
+            rules={[{ required: true, message: "Please enter the price!" }]}
           >
-            <Input.TextArea placeholder="Enter description" />
+            <Input placeholder="Enter price" />
           </Form.Item>
           <Form.Item
             name="advert_type"
@@ -371,8 +369,23 @@ const Houses = () => {
             ]}
           >
             <Select placeholder="Select advert type">
-              <Option value="For Rent">Rent</Option>
-              <Option value="For Sale">Sale</Option>
+              <Option value="For Rent">For Rent</Option>
+              <Option value="For Sale">For Sale</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="property_type"
+            label="Property Type"
+            rules={[
+              { required: true, message: "Please select the property type!" },
+            ]}
+          >
+            <Select placeholder="Select property type">
+              <Option value="Family Houses">Family House</Option>
+              <Option value="Villas">House & Villa</Option>
+              <Option value="Apartment">Apartment</Option>
+              <Option value="Office & Studio">Office & Studio</Option>
+              <Option value="Villa & Condo">Villa & Condo</Option>
             </Select>
           </Form.Item>
         </Form>
