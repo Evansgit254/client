@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
-  Avatar,
-  Rate,
   Space,
   Table,
   Typography,
@@ -10,19 +9,18 @@ import {
   Form,
   Input,
   Select,
-  Upload,
   message,
 } from "antd";
-import { getHouses, addHouse, updateHouse, deleteHouse } from "../../API";
-import { UploadOutlined } from "@ant-design/icons";
+import { useAuth } from "../../context/contextApi";
 
 const { Option } = Select;
 
-function Houses() {
+const Houses = () => {
+  const { accessToken, refreshAccessToken } = useAuth();
   const [body, setBody] = useState({
     property_type: "",
-    country:"",
     id: "",
+    country: "",
     title: "",
     price: "",
     city: "",
@@ -40,17 +38,94 @@ function Houses() {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    setLoading(false);
-    getHouses().then((res) => {
-      setDataSource(res);
-      setFilteredData(res);
-      setLoading(false);
-    });
+    setLoading(true);
+    getHouses()
+      .then((res) => {
+        console.log(res.data); // Log the response data to check its structure
+        if (Array.isArray(res.data)) {
+          setDataSource(res.data);
+          setFilteredData(res.data);
+        } else {
+          console.error("Unexpected response data:", res.data);
+          message.error("Failed to fetch houses. Unexpected response format.");
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch houses:", error);
+        setLoading(false);
+        message.error("Failed to fetch houses.");
+      });
   }, []);
+
+  const getHouses = () => {
+    return axios
+      .get("http://127.0.0.1:8000/api/v1/properties/all/", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch(async (error) => {
+        if (error.response && error.response.status === 401) {
+          await refreshAccessToken();
+          return getHouses();
+        }
+        throw error;
+      });
+  };
+
+  const addHouse = (house) => {
+    return axios
+      .post("localhost:8000/api/v1/properties/create/", house, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch(async (error) => {
+        if (error.response && error.response.status === 401) {
+          await refreshAccessToken();
+          return addHouse(house);
+        }
+        throw error;
+      });
+  };
+
+  const updateHouse = (id, house) => {
+    return axios
+      .put(`http://127.0.0.1:8000/api/v1/properties/${id}/update/`, house, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch(async (error) => {
+        if (error.response && error.response.status === 401) {
+          await refreshAccessToken();
+          return updateHouse(id, house);
+        }
+        throw error;
+      });
+  };
+
+  const deleteHouse = (id) => {
+    return axios
+      .delete(`http://127.0.0.1:8000/api/v1/properties/${id}/delete/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch(async (error) => {
+        if (error.response && error.response.status === 401) {
+          await refreshAccessToken();
+          return deleteHouse(id);
+        }
+        throw error;
+      });
+  };
 
   const showModal = () => {
     setIsEdit(false);
     setCurrentHouse(null);
+    form.resetFields(); // Reset form fields when adding a new house
     setIsModalVisible(true);
   };
 
@@ -72,7 +147,7 @@ function Houses() {
       updateHouse(currentHouse.id, values)
         .then((res) => {
           const updatedData = dataSource.map((house) =>
-            house.id === currentHouse.id ? res : house
+            house.id === currentHouse.id ? res.data : house
           );
           setDataSource(updatedData);
           setFilteredData(updatedData);
@@ -88,8 +163,8 @@ function Houses() {
     } else {
       addHouse(values)
         .then((res) => {
-          setDataSource((prevData) => [...prevData, res]);
-          setFilteredData((prevData) => [...prevData, res]);
+          setDataSource((prevData) => [...prevData, res.data]);
+          setFilteredData((prevData) => [...prevData, res.data]);
           setLoading(false);
           setIsModalVisible(false);
           message.success("House added successfully!");
@@ -164,12 +239,12 @@ function Houses() {
             dataIndex: "id",
           },
           {
-            title: "Title",
-            dataIndex: "title",
-          },
-          {
             title: "Country",
             dataIndex: "country",
+          },
+          {
+            title: "Title",
+            dataIndex: "title",
           },
           {
             title: "Price",
@@ -217,7 +292,7 @@ function Houses() {
       />
       <Modal
         title={isEdit ? "Edit House" : "Add New House"}
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={form.submit}
         onCancel={handleCancel}
       >
@@ -245,76 +320,65 @@ function Houses() {
           <Form.Item
             name="title"
             label="Title"
-            rules={[{ required: true, message: "Please input the title!" }]}
+            rules={[{ required: true, message: "Please enter the title!" }]}
           >
-            <Input />
+            <Input placeholder="Enter title" />
           </Form.Item>
           <Form.Item
             name="country"
             label="Country"
-            rules={[{ required: true, message: "Please input the country!" }]}
+            rules={[{ required: true, message: "Please enter the country!" }]}
           >
-            <Input />
+            <Input placeholder="Enter country" />
           </Form.Item>
           <Form.Item
             name="price"
-            label="Price Range"
-            rules={[
-              { required: true, message: "Please input the price range!" },
-            ]}
+            label="Price"
+            rules={[{ required: true, message: "Please enter the price!" }]}
           >
-            <Input />
+            <Input placeholder="Enter price" />
           </Form.Item>
           <Form.Item
             name="city"
             label="City"
-            rules={[{ required: true, message: "Please select the city!" }]}
+            rules={[{ required: true, message: "Please enter the city!" }]}
           >
-            <Select placeholder="Select city">
-              <Option value="Nairobi">Nairobi</Option>
-              <Option value="Kisumu">Kisumu</Option>
-              <Option value="Mombasa">Mombasa</Option>
-              <Option value="Nakuru">Nakuru</Option>
-              <Option value="Thika">Thika</Option>
-              <Option value="Eldoret">Eldoret</Option>
-              <Option value="Kiambu">Kiambu</Option>
-              <Option value="Naivasha">Naivasha</Option>
-            </Select>
+            <Input placeholder="Enter city" />
           </Form.Item>
           <Form.Item
             name="street_address"
             label="Street Address"
             rules={[
-              { required: true, message: "Please input the street address!" },
+              { required: true, message: "Please enter the street address!" },
             ]}
           >
-            <Input />
+            <Input placeholder="Enter street address" />
           </Form.Item>
           <Form.Item
             name="description"
             label="Description"
             rules={[
-              { required: true, message: "Please input the description!" },
+              { required: true, message: "Please enter the description!" },
             ]}
           >
-            <Input.TextArea />
+            <Input.TextArea placeholder="Enter description" />
           </Form.Item>
           <Form.Item
             name="advert_type"
             label="Advert Type"
             rules={[
-              { required: true, message: "Please select the leasing terms!" },
+              { required: true, message: "Please select the advert type!" },
             ]}
           >
-            <Select placeholder="Select leasing terms">
-              <Option value="For Sale">For Sale</Option>
-              <Option value="For Rent">For Rent</Option>
+            <Select placeholder="Select advert type">
+              <Option value="For Rent">Rent</Option>
+              <Option value="For Sale">Sale</Option>
             </Select>
           </Form.Item>
         </Form>
       </Modal>
     </Space>
   );
-}
+};
 
 export default Houses;

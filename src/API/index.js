@@ -1,7 +1,7 @@
 import axios from "axios";
 export const getClients = async () => {
   try {
-    const response = await axios.get(`${base_url}/users`);
+    const response = await axios.get();
     return response.data;
   } catch (error) {
     console.error("Error fetching clients:", error);
@@ -11,7 +11,7 @@ export const getClients = async () => {
 
 export const addClient = async (body) => {
   try {
-    const response = await axios.post(`${base_url}/users_user/`, body);
+    const response = await axios.post( body);
     return response.data;
   } catch (error) {
     console.error("Error adding client:", error);
@@ -21,7 +21,7 @@ export const addClient = async (body) => {
 
 export const updateClient = async (id, client) => {
   try {
-    const response = await axios.put(`${base_url}/users_user/${id}`, client, {
+    const response = await axios.put(client, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -35,7 +35,7 @@ export const updateClient = async (id, client) => {
 
 export const deleteClient = async (id) => {
   try {
-    const response = await axios.delete(`${base_url}/users_user/${id}`);
+    const response = await axios.delete();
     return response.data;
   } catch (error) {
     console.error("Error deleting client:", error);
@@ -55,7 +55,7 @@ export const getHouses = async () => {
 
 export const addHouse = async (body) => {
   try {
-    const response = await axios.post(`http://127.0.0.1:8000/api/v1/properties/create/`, body); // Used base_url
+    const response = await axios.post( body); // Used base_url
     return response.data;
   } catch (error) {
     console.error("Error adding house:", error);
@@ -65,7 +65,7 @@ export const addHouse = async (body) => {
 
 export const updateHouse = async (id, data) => {
   try {
-    const response = await axios.put(`${base_url}/houses/${id}`, data, {
+    const response = await axios.put(data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -79,7 +79,7 @@ export const updateHouse = async (id, data) => {
 
 export const deleteHouse = async (id) => {
   try {
-    const response = await axios.delete(`${base_url}/houses/${id}`);
+    const response = await axios.delete();
     return response.data;
   } catch (error) {
     console.error("Error deleting house:", error);
@@ -89,7 +89,7 @@ export const deleteHouse = async (id) => {
 
 export const getReviews = async () => {
   try {
-    const response = await axios.get(`${base_url}/reviews`); // Used base_url
+    const response = await axios.get(); // Used base_url
     return response.data;
   } catch (error) {
     console.error("Error fetching reviews:", error);
@@ -99,7 +99,7 @@ export const getReviews = async () => {
 
 export const getBookings = async () => {
   try {
-    const response = await axios.get(`${base_url}/bookings`);
+    const response = await axios.get();
     return response.data;
   } catch (error) {
     console.error("Error fetching bookings:", error);
@@ -109,7 +109,7 @@ export const getBookings = async () => {
 
 export const getPayments = async () => {
   try {
-    const response = await axios.get(`${base_url}/payments`);
+    const response = await axios.get();
     return response.data;
   } catch (error) {
     console.error("Error fetching payments:", error);
