@@ -9,7 +9,7 @@ import {
   BsBoxArrowRight,
 } from "react-icons/bs";
 import "./AdminDashboard.css";
-import { DownOutlined, SmileOutlined } from "@ant-design/icons";
+
 import { Link } from "react-router-dom";
 
 const items = [

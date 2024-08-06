@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-  Avatar,
+  Upload,
   Button,
   Modal,
   Form,
@@ -10,10 +10,12 @@ import {
   Typography,
   message,
 } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { addClient, getClients, updateClient, deleteClient } from "../../API";
 
 function Clients() {
   const [body, setBody] = useState({
+    profile_photo: "",
     username: "",
     first_name: "",
     last_name: "",
@@ -34,7 +36,7 @@ function Clients() {
   };
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(false);
     getClients().then((res) => {
       setDataSource(res);
       setFilteredData(res);
@@ -50,6 +52,7 @@ function Clients() {
     setIsModalVisible(false);
     setEditingClient(null);
     setBody({
+      profile_photo: "",
       username: "",
       first_name: "",
       last_name: "",
@@ -59,7 +62,7 @@ function Clients() {
   };
 
   const handleFinish = (values) => {
-    setLoading(true);
+    setLoading(false);
     if (editingClient) {
       updateClient(editingClient.id, values)
         .then((res) => {
@@ -104,7 +107,7 @@ function Clients() {
   };
 
   const handleDelete = (id) => {
-    setLoading(true);
+    setLoading(false);
     deleteClient(id)
       .then(() => {
         setDataSource(dataSource.filter((client) => client.id !== id));
@@ -161,6 +164,10 @@ function Clients() {
             loading={loading}
             columns={[
               {
+                title: "Profile Photo",
+                dataIndex: "profile_photo",
+              },
+              {
                 title: "First Name",
                 dataIndex: "first_name",
               },
@@ -206,6 +213,17 @@ function Clients() {
           form={form}
           initialValues={editingClient || body}
         >
+          <Form.Item
+            name="profile_photo"
+            label="Profile Photo"
+            rules={[
+              { required: true, message: "Please upload a profile photo" },
+            ]}
+          >
+            <Upload name="profile_photo">
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </Form.Item>
           <Form.Item
             name="username"
             label="Username"

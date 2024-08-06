@@ -29,8 +29,9 @@ export const ContextApi = ({ children }) => {
       // Handle token refresh if the access token is expired
       if (error.response && error.response.status === 401) {
         await refreshAccessToken();
+      } else {
+        console.error(error);
       }
-      console.error(error);
     }
   };
 
@@ -43,7 +44,7 @@ export const ContextApi = ({ children }) => {
         }
       );
       setAuthToken(response.data);
-      getCurrentUser();
+      await getCurrentUser();
     } catch (error) {
       console.error("Failed to refresh token", error);
       logout();

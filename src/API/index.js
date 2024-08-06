@@ -11,7 +11,7 @@ export const getClients = async () => {
 
 export const addClient = async (body) => {
   try {
-    const response = await axios.post( body);
+    const response = await axios.post(body);
     return response.data;
   } catch (error) {
     console.error("Error adding client:", error);
@@ -55,7 +55,7 @@ export const getHouses = async () => {
 
 export const addHouse = async (body) => {
   try {
-    const response = await axios.post( body); // Used base_url
+    const response = await axios.post(body); // Used base_url
     return response.data;
   } catch (error) {
     console.error("Error adding house:", error);
