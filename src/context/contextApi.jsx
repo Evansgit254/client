@@ -5,7 +5,8 @@ export const AppProvider = createContext(null);
 
 export const ContextApi = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() =>
+    localStorage.getItem("user"));
   const [accessToken, setAccessToken] = useState(() =>
     localStorage.getItem("token_access")
   );
@@ -23,12 +24,14 @@ export const ContextApi = ({ children }) => {
           },
         }
       );
-      setUser(response.data);
+      setGlobalUser(response.data)
       setIsLoggedIn(true);
     } catch (error) {
       // Handle token refresh if the access token is expired
-      if (error.response && error.response.status === 401) {
-        await refreshAccessToken();
+      if (error.response) {
+        if(error.response.status === 403 || error.response.status === 401){
+          await refreshAccessToken();
+        }
       } else {
         console.error(error);
       }
@@ -44,7 +47,6 @@ export const ContextApi = ({ children }) => {
         }
       );
       setAuthToken(response.data);
-      await getCurrentUser();
     } catch (error) {
       console.error("Failed to refresh token", error);
       logout();
@@ -63,10 +65,17 @@ export const ContextApi = ({ children }) => {
       console.error("Failed to log in", error);
     }
   };
-
+  const setGlobalUser = (user)=>{
+    setUser(user)
+    localStorage.setItem("user", JSON.stringify(user))
+  }
+  const removeGlobalUser = ()=>{
+    setUser(null)
+    localStorage.removeItem("user")
+  }
   const logout = () => {
     setIsLoggedIn(false);
-    setUser(null);
+    removeGlobalUser()
     localStorage.removeItem("token_access");
     localStorage.removeItem("token_refresh");
     setAccessToken(null);

@@ -11,9 +11,10 @@ import {
   message,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { addClient, getClients, updateClient, deleteClient } from "../../API";
-
+import axios from "axios";
+import { useAuth } from "../../context/contextApi";
 function Clients() {
+  const { accessToken, refreshAccessToken } = useAuth();
   const [body, setBody] = useState({
     profile_photo: "",
     username: "",
@@ -36,13 +37,89 @@ function Clients() {
   };
 
   useEffect(() => {
-    setLoading(false);
-    getClients().then((res) => {
-      setDataSource(res);
-      setFilteredData(res);
-      setLoading(false);
-    });
+    setLoading(true);
+    getClients()
+      .then((res) => {
+        console.log("Response Data:", res.data);
+        const results = res.data.results; // Extract the results array
+        if (Array.isArray(results)) {
+          setDataSource(results);
+          setFilteredData(results);
+        } else {
+          console.error("Unexpected response data format:", results);
+          message.error("Failed to fetch clients. Unexpected response format.");
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch clients:", error);
+        setLoading(false);
+        message.error("Failed to fetch clients.");
+      });
   }, []);
+  const getClients = () => {
+    return axios
+      .get("localhost:8000/api/v1/auth/users/", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch(async (error) => {
+        if (error.response && error.response.status === 401) {
+          await refreshAccessToken();
+          return getClients();
+        }
+        throw error;
+      });
+  };
+
+  const addClient = (client) => {
+    return axios
+      .post("localhost:8000/api/v1/auth/users/", client, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch(async (error) => {
+        if (error.response && error.response.status === 401) {
+          await refreshAccessToken();
+          return addClient;
+        }
+        throw error;
+      });
+  };
+
+  const updateClient = (id, client) => {
+    return axios
+      .put(`/update/${id}/`, client, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch(async (error) => {
+        if (error.response && error.response.status === 401) {
+          await refreshAccessToken();
+          return updateClient(id, client);
+        }
+        throw error;
+      });
+  };
+
+  const deleteClient = (id) => {
+    return axios
+      .delete(`/delete/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch(async (error) => {
+        if (error.response && error.response.status === 401) {
+          await refreshAccessToken();
+          return deleteClient(id);
+        }
+        throw error;
+      });
+  };
 
   const showModal = () => {
     setIsModalVisible(true);

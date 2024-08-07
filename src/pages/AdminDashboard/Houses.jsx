@@ -121,7 +121,7 @@ const Houses = () => {
 
   const deleteHouse = (id) => {
     return axios
-      .delete(`http://localhost:8000/api/v1/properties/delete/${id}/`, {
+      .delete(`http://127.0.0.1:8000/api/v1/properties/delete/${id}/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -260,13 +260,8 @@ const Houses = () => {
             dataIndex: "description",
           },
           {
-<<<<<<< HEAD
             title: "Country",
             dataIndex: "country",
-=======
-            title: "Property Type",
-            dataIndex: "property_type",
->>>>>>> f18f62286c0318efcc72afeb5a274d606894aeb8
           },
           {
             title: "City",
@@ -319,50 +314,28 @@ const Houses = () => {
           name="houseForm"
           onFinish={handleFinish}
         >
+          
           <Form.Item
-            name="property_type"
-            label="Property Type"
-            rules={[
-              { required: true, message: "Please select the property type!" },
-            ]}
-          >
-            <Select placeholder="Select property type">
-              <Option value="Family Houses">Family House</Option>
-              <Option value="Villas">House & Villa</Option>
-              <Option value="Apartment">Apartment</Option>
-              <Option value="Office & Studio">Office & Studio</Option>
-              <Option value="Villa & Condo">Villa & Condo</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name="description"
-            label="Description"
+            name="title"
+            label="Title"
             rules={[
               { required: true, message: "Please enter the house description" },
             ]}
           >
             <Input />
           </Form.Item>
+          
           <Form.Item
             name="description"
             label="Description"
-            rules={[
-              { required: true, message: "Please enter the description!" },
-            ]}
+            rules={[{ required: true, message: "Please enter the description!" }]}
           >
-            <Input.TextArea placeholder="Enter description" />
+            <Input placeholder="Enter country" />
           </Form.Item>
           <Form.Item
             name="country"
             label="Country"
             rules={[{ required: true, message: "Please enter the country!" }]}
-          >
-            <Input placeholder="Enter country" />
-          </Form.Item>
-          <Form.Item
-            name="price"
-            label="Price"
-            rules={[{ required: true, message: "Please enter the price!" }]}
           >
             <Input placeholder="Enter price" />
           </Form.Item>
@@ -383,10 +356,10 @@ const Houses = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            name="description"
-            label="Description"
+            name="price"
+            label="Price"
             rules={[
-              { required: true, message: "Please enter the description!" },
+              { required: true, message: "Please enter the price!" },
             ]}
           >
             <Input.TextArea placeholder="Enter description" />
@@ -399,8 +372,25 @@ const Houses = () => {
             ]}
           >
             <Select placeholder="Select advert type">
-              <Option value="For Rent">Rent</Option>
-              <Option value="For Sale">Sale</Option>
+              <Option value="For Rent"> For Rent</Option>
+              <Option value="For Sale">For Sale</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="property_type"
+            label="Property Type"
+            rules={[
+              { required: true, message: "Please select the property type!" },
+            ]}
+          >
+            <Select placeholder="Select property type">
+              <Option value="Family Houses">Family House</Option>
+              <Option value="Villas">Villas</Option>
+              <Option value="Apartment">Apartment</Option>
+              <Option value="Offices">Offices</Option>
+              <Option value="Condos">Condo</Option>
+              <Option value="Boardrooms">Boardrooms</Option>
+              <Option value="Studio">Studios</Option>
             </Select>
           </Form.Item>
         </Form>
