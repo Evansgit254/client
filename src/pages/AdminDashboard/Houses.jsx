@@ -262,6 +262,10 @@ const Houses = () => {
           {
             title: "Country",
             dataIndex: "country",
+<<<<<<< HEAD
+=======
+       
+>>>>>>> 3a3beb14adb665a80fb81e4d4fe73a8712224574
           },
           {
             title: "City",
@@ -318,6 +322,19 @@ const Houses = () => {
           <Form.Item
             name="title"
             label="Title"
+<<<<<<< HEAD
+=======
+            rules={[
+              { required: true, message: "Please enter the property title" },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+         
+          <Form.Item
+            name="description"
+            label="Description"
+>>>>>>> 3a3beb14adb665a80fb81e4d4fe73a8712224574
             rules={[
               { required: true, message: "Please enter the house description" },
             ]}
@@ -326,6 +343,7 @@ const Houses = () => {
           </Form.Item>
           
           <Form.Item
+<<<<<<< HEAD
             name="description"
             label="Description"
             rules={[{ required: true, message: "Please enter the description!" }]}
@@ -333,12 +351,20 @@ const Houses = () => {
             <Input placeholder="Enter country" />
           </Form.Item>
           <Form.Item
+=======
+>>>>>>> 3a3beb14adb665a80fb81e4d4fe73a8712224574
             name="country"
             label="Country"
             rules={[{ required: true, message: "Please enter the country!" }]}
           >
+<<<<<<< HEAD
             <Input placeholder="Enter price" />
           </Form.Item>
+=======
+            <Input placeholder="Enter country" />
+          </Form.Item>
+         
+>>>>>>> 3a3beb14adb665a80fb81e4d4fe73a8712224574
           <Form.Item
             name="city"
             label="City"
@@ -358,12 +384,17 @@ const Houses = () => {
           <Form.Item
             name="price"
             label="Price"
+<<<<<<< HEAD
             rules={[
               { required: true, message: "Please enter the price!" },
             ]}
+=======
+            rules={[{ required: true, message: "Please enter the price!" }]}
+>>>>>>> 3a3beb14adb665a80fb81e4d4fe73a8712224574
           >
-            <Input.TextArea placeholder="Enter description" />
+            <Input placeholder="Enter price" />
           </Form.Item>
+         
           <Form.Item
             name="advert_type"
             label="Advert Type"
@@ -385,12 +416,19 @@ const Houses = () => {
           >
             <Select placeholder="Select property type">
               <Option value="Family Houses">Family House</Option>
+<<<<<<< HEAD
               <Option value="Villas">Villas</Option>
               <Option value="Apartment">Apartment</Option>
               <Option value="Offices">Offices</Option>
               <Option value="Condos">Condo</Option>
               <Option value="Boardrooms">Boardrooms</Option>
               <Option value="Studio">Studios</Option>
+=======
+              <Option value="Villas">House & Villa</Option>
+              <Option value="Apartment">Apartment</Option>
+              <Option value="Office & Studio">Office & Studio</Option>
+              <Option value="Villa & Condo">Villa & Condo</Option>
+>>>>>>> 3a3beb14adb665a80fb81e4d4fe73a8712224574
             </Select>
           </Form.Item>
         </Form>
