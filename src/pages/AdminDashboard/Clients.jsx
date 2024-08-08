@@ -13,6 +13,7 @@ import {
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useAuth } from "../../context/contextApi";
+
 function Clients() {
   const { accessToken, refreshAccessToken } = useAuth();
   const [body, setBody] = useState({
@@ -31,7 +32,6 @@ function Clients() {
   const [form] = Form.useForm();
 
   const handleChange = (e) => {
-    e.preventDefault();
     const { name, value } = e.target;
     setBody({ ...body, [name]: value });
   };
@@ -41,12 +41,17 @@ function Clients() {
     getClients()
       .then((res) => {
         console.log("Response Data:", res.data);
-        const results = res.data.results; // Extract the results array
-        if (Array.isArray(results)) {
-          setDataSource(results);
-          setFilteredData(results);
+        if (Array.isArray(res.data)) {
+          // Case when response is an array
+          setDataSource(res.data);
+          setFilteredData(res.data);
+        } else if (res.data && Array.isArray(res.data.results)) {
+          // Case when response is an object with a 'results' field
+          setDataSource(res.data.results);
+          setFilteredData(res.data.results);
         } else {
-          console.error("Unexpected response data format:", results);
+          // Unexpected response format
+          console.error("Unexpected response data format:", res.data);
           message.error("Failed to fetch clients. Unexpected response format.");
         }
         setLoading(false);
@@ -57,9 +62,10 @@ function Clients() {
         message.error("Failed to fetch clients.");
       });
   }, []);
+
   const getClients = () => {
     return axios
-      .get("localhost:8000/api/v1/auth/users/", {
+      .get("http://localhost:8000/api/v1/auth/users/", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -75,7 +81,7 @@ function Clients() {
 
   const addClient = (client) => {
     return axios
-      .post("localhost:8000/api/v1/auth/users/", client, {
+      .post("http://localhost:8000/api/v1/auth/users/", client, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -83,7 +89,7 @@ function Clients() {
       .catch(async (error) => {
         if (error.response && error.response.status === 401) {
           await refreshAccessToken();
-          return addClient;
+          return addClient(client);
         }
         throw error;
       });
@@ -91,7 +97,7 @@ function Clients() {
 
   const updateClient = (id, client) => {
     return axios
-      .put(`/update/${id}/`, client, {
+      .put(`http://localhost:8000/api/v1/auth/users/${id}/`, client, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -107,7 +113,7 @@ function Clients() {
 
   const deleteClient = (id) => {
     return axios
-      .delete(`/delete/${id}/`, {
+      .delete(`http://localhost:8000/api/v1/auth/users/${id}/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -145,12 +151,12 @@ function Clients() {
         .then((res) => {
           setDataSource(
             dataSource.map((client) =>
-              client.id === editingClient.id ? res : client
+              client.id === editingClient.id ? res.data : client
             )
           );
           setFilteredData(
             filteredData.map((client) =>
-              client.id === editingClient.id ? res : client
+              client.id === editingClient.id ? res.data : client
             )
           );
           message.success("Client updated successfully!");
@@ -163,8 +169,8 @@ function Clients() {
     } else {
       addClient(values)
         .then((res) => {
-          setDataSource([...dataSource, res]);
-          setFilteredData([...filteredData, res]);
+          setDataSource([...dataSource, res.data]);
+          setFilteredData([...filteredData, res.data]);
           message.success("Client added successfully!");
         })
         .catch((error) => {
@@ -184,7 +190,7 @@ function Clients() {
   };
 
   const handleDelete = (id) => {
-    setLoading(false);
+    setLoading(true);
     deleteClient(id)
       .then(() => {
         setDataSource(dataSource.filter((client) => client.id !== id));
@@ -337,16 +343,25 @@ function Clients() {
           <Form.Item
             name="email"
             label="Email"
-            rules={[
-              { required: true, message: "Please input the email" },
-              { type: "email", message: "Please enter a valid email" },
-            ]}
+            rules={[{ required: true, message: "Please input the email" }]}
           >
-            <Input name="email" value={body.email} onChange={handleChange} />
+            <Input
+              name="email"
+              type="email"
+              value={body.email}
+              onChange={handleChange}
+            />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="Password"
+            rules={[{ required: true, message: "Please input the password" }]}
+          >
+            <Input.Password name="password" />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
-              {editingClient ? "Update Client" : "Create Client"}
+              {editingClient ? "Update" : "Add"}
             </Button>
           </Form.Item>
         </Form>

@@ -5,49 +5,86 @@ import {
   Space,
   Button,
   Badge,
-  Avatar,
   Modal,
   Form,
   Input,
   DatePicker,
   Select,
+  message,
 } from "antd";
-import { getBookings } from "../../API"; // Assume you have an API function to fetch bookings
-import { BsPersonCircle } from "react-icons/bs";
+import axios from "axios";
+import { useAuth } from "../../context/contextApi";
 
 const { Option } = Select;
 
 const Bookings = () => {
+  const { accessToken, refreshAccessToken } = useAuth();
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    setLoading(false);
-    getBookings().then((res) => {
-      setDataSource(res.bookings);
-      setLoading(false);
-    });
+    setLoading(true);
+    getBookings()
+      .then((res) => {
+        console.log("Full Response Data:", res.data); // Log the full response data
+        const results = res.data.results || []; // Handle case where results may be undefined
+
+        if (Array.isArray(results)) {
+          setDataSource(results);
+        } else {
+          console.error("Unexpected response data format:", results);
+          message.error("Failed to fetch bookings. Unexpected response format.");
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch bookings:", error);
+        setLoading(false);
+        message.error("Failed to fetch bookings.");
+      });
   }, []);
+
+  const getBookings = () => {
+    return axios
+      .get("", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Correct template literal
+        },
+      })
+      .then((response) => {
+        // Check the response and extract results
+        console.log("Full Response Data:", response.data);
+        const results = response.data.results || []; // Default to empty array if results are missing
+        return { data: { results } };
+      })
+      .catch(async (error) => {
+        if (error.response && error.response.status === 401) {
+          await refreshAccessToken();
+          return getBookings(); // Retry fetching bookings after refreshing the token
+        }
+        throw error; // Rethrow the error if not handled
+      });
+  };
 
   const columns = [
     {
-      title: "Photo",
-      dataIndex: "clientPhoto",
-      render: (link) => <Avatar src={link} />,
-    },
-    {
-      title: "Username",
-      dataIndex: "username",
-    },
-    {
-      title: "Property-Type",
-      dataIndex: "property",
+      title: "Product Id",
+      dataIndex: "id",
+      // render: (link) => <Avatar src={link} />,
     },
     {
       title: "Booking Date",
-      dataIndex: "bookingDate",
+      dataIndex: "Booking Date",
+    },
+    {
+      title: "Property",
+      dataIndex: "property",
+    },
+    {
+      title: "User",
+      dataIndex: "user",
     },
     {
       title: "Status",

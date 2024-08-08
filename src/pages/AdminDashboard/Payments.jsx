@@ -10,26 +10,69 @@ import {
   DatePicker,
   Select,
   notification,
-  Avatar,
-  Badge,
 } from "antd";
-import { getPayments } from "../../API"; // Assume you have an API function to fetch payments
+import axios from "axios";
+import { useAuth } from "../../context/contextApi";
 
 const { Option } = Select;
 
 const Payments = () => {
+  const { accessToken, refreshAccessToken } = useAuth();
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    setLoading(false);
-    getPayments().then((res) => {
-      setDataSource(res.payments);
-      setLoading(false);
-    });
+    setLoading(true);
+    getPayments()
+      .then((res) => {
+        console.log("Full Response Data:", res); // Log the full response
+        if (res && res.data && res.data.results) {
+          const results = res.data.results; // Extract the results array
+          if (Array.isArray(results)) {
+            setDataSource(results);
+          } else {
+            console.error("Unexpected response data format:", results);
+            notification.error({
+              message: "Failed to fetch payments",
+              description: "Unexpected response format.",
+            });
+          }
+        } else {
+          console.error("Unexpected response format:", res);
+          notification.error({
+            message: "Failed to fetch payments",
+            description: "Unexpected response format.",
+          });
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch payments:", error);
+        setLoading(false);
+        notification.error({
+          message: "Failed to fetch payments",
+          description: "An error occurred while fetching payments.",
+        });
+      });
   }, []);
+
+  const getPayments = () => {
+    return axios
+      .get("/api/payments", { // Ensure this is the correct API endpoint
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .catch(async (error) => {
+        if (error.response && error.response.status === 401) {
+          await refreshAccessToken();
+          return getPayments(); // Retry fetching payments after refreshing the token
+        }
+        throw error;
+      });
+  };
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -57,17 +100,12 @@ const Payments = () => {
 
   const columns = [
     {
-      title: "Client Photo",
-      dataIndex: "clientPhoto",
-      render: (link) => <Avatar src={link} />,
+      title: "Booking",
+      dataIndex: "booking",
     },
     {
-      title: "Client Name",
-      dataIndex: "clientName",
-    },
-    {
-      title: "Property",
-      dataIndex: "property",
+      title: "User",
+      dataIndex: "user",
     },
     {
       title: "Amount",
@@ -75,19 +113,20 @@ const Payments = () => {
       render: (amount) => <span>$ {amount}</span>,
     },
     {
-      title: "Payment Date",
-      dataIndex: "payment_date",
+      title: "Transaction ID",
+      dataIndex: "transaction_id",
     },
-    {
-      title: "Status",
-      dataIndex: "status",
-      render: (status) => (
-        <Badge
-          status={status === "paid" ? "success" : "warning"}
-          text={status.charAt(0).toUpperCase() + status.slice(1)}
-        />
-      ),
-    },
+    // Uncomment and adjust this if you want to display status
+    // {
+    //   title: "Status",
+    //   dataIndex: "status",
+    //   render: (status) => (
+    //     <Badge
+    //       status={status === "paid" ? "success" : "warning"}
+    //       text={status.charAt(0).toUpperCase() + status.slice(1)}
+    //     />
+    //   ),
+    // },
   ];
 
   return (
